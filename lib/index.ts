@@ -3,8 +3,9 @@ const config = require("../env.json");
 
 const isTarget = (event: any): boolean => {
   return (
+    event.payload.mentions.find((m: any) => m.acct === config.acctMe) &&
     event.payload.mentions.length >= config.mentionCount &&
-    event.payload.account.followersCount === 0
+    event.payload.account.followersCount <= config.minFollowers
   );
 };
 
@@ -21,10 +22,9 @@ const rest = createRestAPIClient({
 const subscribe = async (): Promise<void> => {
   console.log("subscribed to public time line");
 
-  for await (const event of streaming.public.subscribe()) {
+  for await (const event of streaming.user.subscribe()) {
     switch (event.event) {
       case "update": {
-        console.log("new post", event.payload.content);
         try {
           if (isTarget(event)) {
             const report = await rest.v1.reports.create({
@@ -39,6 +39,10 @@ const subscribe = async (): Promise<void> => {
                 type: "suspend",
                 reportId: report.id,
               });
+            await rest.v1.accounts.$select(event.payload.account.id).block();
+            console.log(
+              `#############################################################################`
+            );
             console.log(
               `Reported: from:${event.payload.account.acct} statusId:${event.payload.id}`
             );
