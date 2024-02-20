@@ -3,6 +3,7 @@ const config = require("../env.json");
 
 const isTarget = (event: any): boolean => {
   console.log(
+    new Date().toISOString(),
     event.payload.id,
     event.payload.mentions.find((m: any) => m.acct === config.acctMe),
     event.payload.mentions.length >= config.mentionCount,
@@ -31,7 +32,7 @@ const rest = createRestAPIClient({
 export const fromStreaming = async (): Promise<void> => {
   console.log("subscribed to public time line");
 
-  for await (const event of streaming.public.subscribe()) {
+  for await (const event of streaming.user.subscribe()) {
     switch (event.event) {
       case "update": {
         try {
