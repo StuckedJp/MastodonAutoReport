@@ -5,7 +5,7 @@ const config = require("../env.json");
 
 export const fromStreaming = async (): Promise<void> => {
   const streaming = createStreamingAPIClient({
-    streamingApiUrl: `wss://${config.domain}/api/v1/streaming/?`,
+    streamingApiUrl: `https://${config.domain}/api/v1/streaming/?`,
     accessToken: config.accessToken,
   });
 
