@@ -9,14 +9,16 @@ export const isTarget = (param: IsTargetParam): boolean => {
   const retVal =
     !!param.status.mentions.find((m: any) => m.acct === config.acctMe) &&
     param.status.mentions.length >= config.mentionCount &&
-    param.status.account.followersCount <= config.minFollowers;
+    Date.now() - Date.parse(param.status.account.createdAt) <=
+      config.createdAtThreshold;
 
   console.log(
     new Date().toISOString(),
     param.status.id,
     param.status.mentions.find((m: any) => m.acct === config.acctMe),
     param.status.mentions.length >= config.mentionCount,
-    param.status.account.followersCount <= config.minFollowers,
+    Date.now() - Date.parse(param.status.account.createdAt) <=
+      config.createdAtThreshold,
     retVal
   );
 
