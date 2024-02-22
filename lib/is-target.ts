@@ -18,7 +18,6 @@ export const isTarget = (param: IsTargetParam): boolean => {
     param.status.mentions.find((m: any) => m.acct === config.acctMe),
     param.status.mentions.length >= config.mentionCount,
     Date.now() - Date.parse(param.status.account.createdAt),
-    config.createdAtThreshold,
     retVal
   );
 
