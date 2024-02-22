@@ -14,7 +14,7 @@ export const reportAndBlock = async (
       category: "spam",
       forward: true,
       statusIds: [param.status.id],
-      comment: "Automatic report.",
+      comment: "It might be SPAM.",
     });
     await rest.v1.admin.accounts
       .$select(param.status.account.id)
