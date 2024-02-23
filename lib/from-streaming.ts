@@ -16,17 +16,18 @@ export const fromStreaming = async (): Promise<void> => {
 
   console.log("subscribed to public time line");
 
-  for await (const event of streaming.public.subscribe()) {
+  for await (const event of streaming.user.notification.subscribe()) {
     switch (event.event) {
-      case "update": {
+      case "notification": {
         try {
           if (
+            event.payload.status &&
             isTarget({
-              status: event.payload,
+              status: event.payload.status,
             })
           ) {
             await reportAndBlock(rest, {
-              status: event.payload,
+              status: event.payload.status,
             });
           }
         } catch (err) {
